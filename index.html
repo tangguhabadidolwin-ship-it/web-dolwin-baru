@@ -2,75 +2,67 @@
 <html lang="id">
 <head>
     <meta charset="UTF-8">
-    <title>Dolwin Group | Official Corporate Portal</title>
+    <title>Dolwin Group | Official Portal</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
         :root { --navy: #001a4d; --gold: #c5a059; --bg: #000a20; }
         body { background: var(--bg); color: #fff; font-family: 'Segoe UI', sans-serif; overflow: hidden; height: 100vh; }
         
-        /* Layout View */
-        .app-container { height: calc(100vh - 160px); overflow-y: auto; padding: 40px; }
-        .view-section { display: none; }
-        .view-section.active { display: block; }
-        
-        /* Nav Dock */
-        .dock { position: fixed; bottom: 0; width: 100%; height: 80px; background: rgba(0, 10, 32, 0.95); backdrop-filter: blur(10px); display: flex; justify-content: center; gap: 60px; align-items: center; border-top: 2px solid var(--gold); }
-        .dock-item { color: #888; text-decoration: none; text-align: center; font-size: 0.75rem; transition: 0.3s; }
-        .dock-item:hover, .dock-item.active { color: var(--gold); transform: translateY(-5px); }
-        
+        /* Layout */
+        .main-view { height: calc(100vh - 160px); overflow-y: auto; padding: 40px; }
+        .section { display: none; }
+        .section.active { display: block; animation: fadeIn 0.5s; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+        /* Logo Box (Biar Tidak Pecah) */
+        .logo-box { width: 100%; height: 150px; background: #fff; border-radius: 10px; display: flex; align-items: center; justify-content: center; padding: 20px; margin-bottom: 20px; }
+        .logo-box img { max-width: 100%; max-height: 100%; object-fit: contain; }
+
         /* Modern Cards */
-        .unit-card { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 15px; padding: 30px; transition: 0.3s; }
-        .unit-card:hover { border-color: var(--gold); background: rgba(255,255,255,0.1); }
-        .logo-box { height: 100px; display: flex; align-items: center; justify-content: center; margin-bottom: 20px; }
-        .logo-box img { max-height: 100%; max-width: 100%; object-fit: contain; }
+        .card-unit { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 15px; padding: 20px; text-align: center; height: 100%; transition: 0.3s; }
+        .card-unit:hover { background: rgba(255,255,255,0.1); border-color: var(--gold); }
+
+        /* Bottom Dock */
+        .dock { position: fixed; bottom: 0; width: 100%; height: 80px; background: #000a20; display: flex; justify-content: center; gap: 40px; align-items: center; border-top: 2px solid var(--gold); z-index: 1000; }
+        .dock-item { color: #888; cursor: pointer; text-align: center; font-size: 0.7rem; font-weight: bold; }
+        .dock-item.active { color: var(--gold); }
     </style>
 </head>
 <body>
 
     <!-- Header -->
-    <div class="d-flex justify-content-between p-4 border-bottom border-secondary">
-        <h4 class="fw-bold m-0">DOLWIN GROUP</h4>
-        <small class="text-secondary">Jl. Moch Salim No. 33, Panjang, Bandar Lampung</small>
+    <div class="d-flex justify-content-between px-5 py-3 border-bottom border-secondary">
+        <h5 class="m-0 fw-bold">DOLWIN GROUP</h5>
+        <div class="small">Jl. Moch Salim No. 33, Bandar Lampung</div>
     </div>
 
-    <!-- Content Views -->
-    <div class="app-container">
-        <!-- Tab Intro -->
-        <section id="view-intro" class="view-section active">
-            <h1 class="text-gold">Tentang Dolwin</h1>
-            <p class="lead">Solusi logistik dan perdagangan yang efisien dan profesional[cite: 2].</p>
-            <div class="row mt-4">
-                <div class="col-md-6"><h5>Visi</h5><p>Menjadi perusahaan penyedia layanan logistik global terkemuka[cite: 2].</p></div>
-                <div class="col-md-6"><h5>Misi</h5><p>Menyediakan layanan berkualitas tinggi, cepat, aman, dan efisien[cite: 2].</p></div>
-            </div>
-        </section>
+    <!-- Main Content -->
+    <div class="main-view container">
+        <!-- Intro -->
+        <div id="intro" class="section active">
+            <h2 class="text-gold">Tentang Kami</h2>
+            <p>Dolwin Group adalah perusahaan yang berkembang pesat di Indonesia dengan fokus utama pada jasa trucking ekspor-impor, trading, dan stevedoring.</p>
+        </div>
 
-        <!-- Tab Unit Bisnis -->
-        <section id="view-units" class="view-section">
+        <!-- Unit Bisnis -->
+        <div id="units" class="section">
             <div class="row g-4">
-                <div class="col-md-4"><div class="unit-card"><div class="logo-box"><img src="dolwin_logo.png"></div><h5>PT. Dolwin Trans Logistik</h5><p class="small">Logistik, Freight Forwarding & Trucking[cite: 2].</p></div></div>
-                <div class="col-md-4"><div class="unit-card"><div class="logo-box"><img src="logo_dta.png"></div><h5>PT. Dolwin Tangguh Abadi</h5><p class="small">Stevedoring & Cargodoring[cite: 2].</p></div></div>
-                <div class="col-md-4"><div class="unit-card"><div class="logo-box"><img src="logo_dts.png"></div><h5>PT. Dolwin Trading Service</h5><p class="small">General Trading & Komoditas[cite: 2].</p></div></div>
+                <div class="col-md-4"><div class="card-unit"><div class="logo-box"><img src="dolwin_logo.png"></div><h5>PT. DTL</h5><p class="small">Logistik & Freight Forwarding[cite: 2].</p></div></div>
+                <div class="col-md-4"><div class="card-unit"><div class="logo-box"><img src="logo_dta.png"></div><h5>PT. DTA</h5><p class="small">Stevedoring & Cargodoring[cite: 2].</p></div></div>
+                <div class="col-md-4"><div class="card-unit"><div class="logo-box"><img src="logo_dts.png"></div><h5>PT. DTS</h5><p class="small">General Trading Company[cite: 2].</p></div></div>
             </div>
-        </section>
-
-        <!-- Tab Portal -->
-        <section id="view-portal" class="view-section">
-            <h1>Portal Aplikasi</h1>
-            <p>Akses dashboard data monitoring unit & ritase Anda[cite: 1].</p>
-        </section>
+        </div>
     </div>
 
-    <!-- Dock Menu -->
+    <!-- Bottom Dock -->
     <div class="dock">
-        <a href="#" class="dock-item active" onclick="show('view-intro', this)"><div>🏠</div>INTRO</a>
-        <a href="#" class="dock-item" onclick="show('view-units', this)"><div>🚢</div>UNIT BISNIS</a>
-        <a href="#" class="dock-item" onclick="show('view-portal', this)"><div>💻</div>APP/PORTAL</a>
+        <div class="dock-item active" onclick="nav('intro', this)"><div>🏠</div>INTRO</div>
+        <div class="dock-item" onclick="nav('units', this)"><div>🚢</div>UNIT BISNIS</div>
     </div>
 
     <script>
-        function show(id, el) {
-            document.querySelectorAll('.view-section').forEach(s => s.classList.remove('active'));
+        function nav(id, el) {
+            document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
             document.querySelectorAll('.dock-item').forEach(i => i.classList.remove('active'));
             document.getElementById(id).classList.add('active');
             el.classList.add('active');
