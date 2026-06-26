@@ -3,73 +3,111 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dolwin Group | Official Website</title>
+    <title>Dolwin Group | Solusi Logistik Terpadu</title>
+    <!-- Bootstrap 5.3.3 CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts: Poppins -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    
     <style>
-        body { font-family: 'Inter', sans-serif; }
-        /* Hero Section (Banner Utama) */
-        .hero { background: linear-gradient(rgba(0,26,77,0.85), rgba(0,26,77,0.85)), url('https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?q=80&w=2070&auto=format&fit=crop'); background-size: cover; background-position: center; padding: 120px 0; color: white; text-align: center; }
-        .hero h1 { font-size: 3rem; font-weight: 700; margin-bottom: 20px; }
-        
-        /* Logo Box (Penjaga Kualitas Gambar) */
-        .logo-box { width: 100%; height: 180px; display: flex; align-items: center; justify-content: center; background: #fff; padding: 15px; margin-bottom: 20px; border: 1px solid #ddd; }
-        .logo-box img { max-width: 100%; max-height: 100%; object-fit: contain; }
-        
-        /* Business Unit Section */
-        .unit-card { border: none; box-shadow: 0 10px 30px rgba(0,0,0,0.08); padding: 30px; transition: 0.3s; height: 100%; background: #fff; }
-        .unit-card:hover { transform: translateY(-10px); box-shadow: 0 20px 40px rgba(0,0,0,0.15); }
-        
-        /* Footer */
-        footer { background: #001a4d; color: #fff; padding: 50px 0; margin-top: 50px; }
+        body { font-family: 'Poppins', sans-serif; background-color: #f8f9fa; }
+        .navbar { background-color: #0d47a1 !important; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+        .carousel-item { height: 85vh; min-height: 500px; background-color: #000; }
+        .carousel-item img { width: 100%; height: 100%; object-fit: cover; opacity: 0.45; }
+        .carousel-caption { top: 50%; transform: translateY(-50%); bottom: auto; z-index: 10; }
+        .carousel-caption h1 { font-weight: 800; text-shadow: 2px 2px 8px rgba(0,0,0,0.8); letter-spacing: 1px; }
+        .carousel-caption p { text-shadow: 1px 1px 4px rgba(0,0,0,0.8); }
+        .company-card { background: #ffffff; border-radius: 15px; padding: 30px 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.08); height: 100%; transition: 0.3s; border-bottom: 5px solid transparent; }
+        .company-card:hover { transform: translateY(-10px); border-bottom: 5px solid #ff6f00; }
+        .company-logo { height: 80px; object-fit: contain; margin-bottom: 25px; }
+        .compro-list { text-align: left; font-size: 0.95rem; color: #555; }
+        .compro-list li { margin-bottom: 12px; }
+        .compro-list i { color: #0d47a1; margin-right: 8px; }
+        .foto-kegiatan-area { margin-top: 20px; padding-top: 20px; border-top: 1px dashed #ccc; }
     </style>
 </head>
 <body>
 
     <!-- Navbar -->
-    <nav class="navbar navbar-expand-lg navbar-light bg-white sticky-top shadow-sm py-3">
+    <nav class="navbar navbar-expand-lg navbar-dark sticky-top">
         <div class="container">
-            <a class="navbar-brand fw-bold" href="#">DOLWIN GROUP</a>
-            <div class="navbar-nav ms-auto">
-                <a class="nav-link" href="#profil">Profil</a>
-                <a class="nav-link" href="#unit">Unit Bisnis</a>
-                <a class="nav-link" href="#kontak">Kontak</a>
+            <a class="navbar-brand fw-bold fs-4" href="#">DOLWIN <span class="text-warning">GROUP</span></a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto align-items-center">
+                    <li class="nav-item"><a class="nav-link text-white" href="#pilar">Pilar Bisnis</a></li>
+                    <li class="nav-item ms-lg-3 mt-3 mt-lg-0">
+                        <a class="btn btn-warning fw-bold px-4 rounded-pill" href="#">
+                            <i class="fas fa-lock me-2"></i>Portal Internal
+                        </a>
+                    </li>
+                </ul>
             </div>
         </div>
     </nav>
 
-    <!-- Banner (Hero) -->
-    <header class="hero">
-        <div class="container">
-            <h1>Solusi Logistik & Perdagangan Terpercaya</h1>
-            <p class="lead">Profesional, efisien, dan berpengalaman sejak 2012[cite: 2].</p>
+    <!-- BANNER -->
+    <div id="bannerUtama" class="carousel slide" data-bs-ride="carousel">
+        <div class="carousel-inner">
+            <div class="carousel-item active">
+                <img src="https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?q=80&w=2070" alt="Banner 1">
+                <div class="carousel-caption">
+                    <h1 class="display-3 fw-bold text-white mb-3">Dolwin <span class="text-warning">Group</span></h1>
+                    <p class="lead mb-5 mx-auto fs-4" style="max-width: 800px;">Memberikan Layanan Berkualitas Tinggi Kepada Pengguna Jasa.</p>
+                    <a href="#pilar" class="btn btn-primary btn-lg rounded-pill px-5 fw-bold shadow-lg">Jelajahi Kami</a>
+                </div>
+            </div>
         </div>
-    </header>
+    </div>
 
-    <!-- Unit Bisnis -->
-    <section id="unit" class="py-5">
-        <div class="container">
-            <h2 class="text-center mb-5 fw-bold">Unit Bisnis Kami</h2>
-            <div class="row g-4">
-                <div class="col-md-4">
-                    <div class="unit-card">
-                        <div class="logo-box"><img src="dolwin_logo.png" alt="DTL"></div>
-                        <h5>PT. Dolwin Trans Logistik</h5>
-                        <p class="text-muted">Fokus pada logistik terintegrasi, ekspor-impor, dan freight forwarding.[cite: 2]</p>
+    <!-- PILAR BISNIS -->
+    <section id="pilar" class="py-5">
+        <div class="container py-4">
+            <div class="text-center mb-5">
+                <h2 class="fw-bold" style="color: #0d47a1;">Pilar Bisnis Kami</h2>
+            </div>
+            <div class="row g-4 text-center">
+                
+                <!-- 1. DTL -->
+                <div class="col-lg-4 col-md-12">
+                    <div class="company-card">
+                        <img src="dolwin logo.png" alt="PT Dolwin Trans Logistik" class="company-logo">
+                        <h5 class="fw-bold mb-3">PT. Dolwin Trans Logistik</h5>
+                        <ul class="list-unstyled compro-list">
+                            <li><i class="fas fa-truck-moving"></i> <strong>Jasa Trucking:</strong> Melayani ekspor-impor, dari pelabuhan ke gudang[cite: 1].</li>
+                            <li><i class="fas fa-warehouse"></i> <strong>Pengelolaan Gudang:</strong> Fasilitas penyimpanan aman & inventory management.</li>
+                            <li><i class="fas fa-ship"></i> <strong>Freight Forwarding:</strong> Moda transportasi laut, udara, dan darat.</li>
+                        </ul>
                     </div>
                 </div>
-                <div class="col-md-4">
-                    <div class="unit-card">
-                        <div class="logo-box"><img src="logo_dta.png" alt="DTA"></div>
-                        <h5>PT. Dolwin Tangguh Abadi</h5>
-                        <p class="text-muted">Spesialis jasa bongkar muat (stevedoring) & cargodoring.[cite: 2]</p>
+
+                <!-- 2. DTA -->
+                <div class="col-lg-4 col-md-12">
+                    <div class="company-card">
+                        <img src="logo_dta.png" alt="PT Dolwin Tangguh Abadi" class="company-logo">
+                        <h5 class="fw-bold mb-3">PT. Dolwin Tangguh Abadi</h5>
+                        <ul class="list-unstyled compro-list">
+                            <li><i class="fas fa-crane"></i> <strong>Stevedoring:</strong> Bongkar muat barang dari kapal ke dermaga.</li>
+                            <li><i class="fas fa-dolly"></i> <strong>Cargodoring:</strong> Pemindahan barang dari dermaga ke lapangan penumpukan.</li>
+                            <li><i class="fas fa-handshake"></i> <strong>Receiving & Delivery:</strong> Penerimaan dan penyerahan barang yang aman.</li>
+                        </ul>
                     </div>
                 </div>
-                <div class="col-md-4">
-                    <div class="unit-card">
-                        <div class="logo-box"><img src="logo_dts.png" alt="DTS"></div>
-                        <h5>PT. Dolwin Trading Service</h5>
-                        <p class="text-muted">General Trading Company, penyedia komoditas efisien.[cite: 2]</p>
+
+                <!-- 3. DTS -->
+                <div class="col-lg-4 col-md-12">
+                    <div class="company-card">
+                        <img src="logo dts.png" alt="PT Dolwin Trading Service" class="company-logo">
+                        <h5 class="fw-bold mb-3">PT. Dolwin Trading Service</h5>
+                        <ul class="list-unstyled compro-list">
+                            <li><i class="fas fa-fish"></i> <strong>Perdagangan Barang:</strong> Sektor perikanan, batubara, dan cangkang sawit.</li>
+                            <li><i class="fas fa-user-tie"></i> <strong>Perdagangan Jasa:</strong> Konsultasi logistik & solusi kustomisasi.</li>
+                            <li><i class="fas fa-seedling"></i> <strong>Cangkang Sawit:</strong> Bahan bakar boiler alternatif berkualitas tinggi.</li>
+                        </ul>
                     </div>
                 </div>
             </div>
@@ -77,11 +115,12 @@
     </section>
 
     <!-- Footer -->
-    <footer id="kontak">
-        <div class="container text-center">
-            <h5>DOLWIN GROUP</h5>
-            <p>Jl. Moch Salim No. 33, Way Lunik, Panjang, Bandar Lampung[cite: 2]</p>
-            <p>Telp: (0721) 3738028 | Email: lampung@dolwin.co.id[cite: 2]</p>
+    <footer class="bg-dark text-white py-4 mt-4 text-center">
+        <div class="container">
+            <h5 class="fw-bold text-warning mb-3">DOLWIN GROUP</h5>
+            <p class="mb-1"><i class="fas fa-map-marker-alt text-warning me-2"></i>Jl. Moch Salim No. 33 Way Lunik, Panjang, Bandar Lampung[cite: 1]</p>
+            <p class="mb-3"><i class="fas fa-envelope text-warning me-2"></i>lampung@dolwin.co.id | <i class="fas fa-phone text-warning me-2"></i>(0721) 3738028[cite: 1]</p>
+            <p class="small opacity-50 mb-0">&copy; 2026 Dolwin Group. All Rights Reserved.</p>
         </div>
     </footer>
 
