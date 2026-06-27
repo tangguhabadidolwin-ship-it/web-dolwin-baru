@@ -30,9 +30,17 @@
         .table-input input, .table-input select { border: 1px solid #dee2e6; width: 100%; padding: 6px; font-size: 0.75rem; border-radius: 4px; }
         .table-input input:focus, .table-input select:focus { outline: none; border-color: #ff9800; background-color: #fffde7; box-shadow: 0 0 5px rgba(255, 152, 0, 0.3); }
         
+        /* Lebar Kolom HP & Efek 3D */
+        .table-input th:nth-child(5), .table-input td:nth-child(5) { min-width: 140px; } 
+        .table-input th:nth-child(6), .table-input td:nth-child(6) { min-width: 130px; } 
+        .table-input th:nth-child(7), .table-input td:nth-child(7) { min-width: 120px; } 
+        .table-input th, .table-input td { min-width: 70px; }
+        .btn-3d { border-bottom: 4px solid rgba(0,0,0,0.3); transition: all 0.1s; }
+        .btn-3d:active { border-bottom: 0px; transform: translateY(4px); margin-bottom: 4px; }
+
         .input-upper { text-transform: uppercase; }
-        .table-responsive::-webkit-scrollbar { height: 8px; }
-        .table-responsive::-webkit-scrollbar-thumb { background: #ccc; border-radius: 4px; }
+        .table-responsive::-webkit-scrollbar { height: 10px; }
+        .table-responsive::-webkit-scrollbar-thumb { background: #0d47a1; border-radius: 5px; }
         
         /* Draft Buttons */
         .draft-item { display: flex; justify-content: space-between; align-items: center; background: rgba(255,255,255,0.1); padding: 8px; font-size: 0.85rem; border-radius: 6px; margin-bottom: 8px; cursor: pointer; transition: 0.3s; }
@@ -79,13 +87,13 @@
             <div id="draftListArea" class="flex-grow-1 overflow-auto mt-2 pe-1"></div>
 
             <div class="mt-auto pt-3 border-top border-secondary">
-                <button class="btn btn-outline-light w-100 btn-sm" onclick="window.location.href='index.html'"><i class="fas fa-sign-out-alt me-2"></i>Keluar Sistem</button>
+                <button class="btn btn-outline-light w-100 btn-sm btn-3d" onclick="window.location.href='index.html'"><i class="fas fa-sign-out-alt me-2"></i>Keluar Sistem</button>
             </div>
         </div>
 
         <div class="main-content bg-light">
             <div class="d-flex align-items-center mb-4">
-                <button class="btn btn-primary d-lg-none me-3 shadow-sm" onclick="toggleSidebar()"><i class="fas fa-bars"></i></button>
+                <button class="btn btn-primary d-lg-none me-3 shadow-sm btn-3d" onclick="toggleSidebar()"><i class="fas fa-bars"></i></button>
                 <h4 class="fw-bold text-dark m-0" id="pageTitle" style="font-size: 1.2rem;">Receiving - PT. SPF | Gudang 3</h4>
             </div>
 
@@ -115,10 +123,10 @@
                 <div class="d-flex flex-column flex-lg-row justify-content-between align-items-lg-center mb-3 gap-3">
                     <h6 class="fw-bold text-primary m-0">Detail Scan Cargo (MDF)</h6>
                     <div class="d-flex flex-wrap gap-2">
-                        <button class="btn btn-info btn-sm fw-bold text-white shadow-sm flex-grow-1" onclick="startCameraScan()" data-bs-toggle="modal" data-bs-target="#cameraModal"><i class="fas fa-camera"></i> Scan Kamera</button>
-                        <button class="btn btn-outline-secondary btn-sm fw-bold flex-grow-1" onclick="newTransaction()"><i class="fas fa-plus"></i> Transaksi Baru</button>
-                        <button class="btn btn-warning btn-sm fw-bold shadow-sm flex-grow-1" onclick="saveDraft()"><i class="fas fa-save"></i> Simpan Draft</button>
-                        <button class="btn btn-success btn-sm fw-bold shadow-sm flex-grow-1" onclick="finalizeTransaction()"><i class="fas fa-check-double"></i> Selesai</button>
+                        <button class="btn btn-info btn-sm fw-bold text-white shadow-sm flex-grow-1 btn-3d" onclick="startCameraScan()" data-bs-toggle="modal" data-bs-target="#cameraModal"><i class="fas fa-camera"></i> Scan Kamera</button>
+                        <button class="btn btn-outline-secondary btn-sm fw-bold flex-grow-1 btn-3d" onclick="newTransaction()"><i class="fas fa-plus"></i> Transaksi Baru</button>
+                        <button class="btn btn-warning btn-sm fw-bold shadow-sm flex-grow-1 btn-3d" onclick="saveDraft()"><i class="fas fa-save"></i> Simpan Draft</button>
+                        <button class="btn btn-success btn-sm fw-bold shadow-sm flex-grow-1 btn-3d" onclick="finalizeTransaction()"><i class="fas fa-check-double"></i> Selesai</button>
                     </div>
                 </div>
                 
@@ -134,7 +142,7 @@
                         <tbody id="tableBody"></tbody>
                     </table>
                 </div>
-                <button class="btn btn-secondary btn-sm mt-3 w-100 w-lg-auto" onclick="addRows(10)"><i class="fas fa-plus"></i> Tambah 10 Baris</button>
+                <button class="btn btn-secondary btn-sm mt-3 w-100 w-lg-auto btn-3d" onclick="addRows(10)"><i class="fas fa-plus"></i> Tambah 10 Baris</button>
             </div>
         </div>
     </div>
@@ -150,7 +158,7 @@
                     <div id="reader"></div>
                 </div>
                 <div class="modal-footer justify-content-center">
-                    <button type="button" class="btn btn-secondary fw-bold" data-bs-dismiss="modal" onclick="stopCameraScan()">Tutup Kamera</button>
+                    <button type="button" class="btn btn-secondary fw-bold btn-3d" data-bs-dismiss="modal" onclick="stopCameraScan()">Tutup Kamera</button>
                 </div>
             </div>
         </div>
@@ -174,7 +182,7 @@
             document.getElementById('pageTitle').innerText = shipper.options[shipper.selectedIndex].text + " | " + gudang.split(' - ')[0];
         }
 
-        function simulateDashboard() { /* Logika dummy dashboard */ }
+        function simulateDashboard() { /* Logika dummy dashboard sementara */ }
 
         function processHistory(inputElement, listId, prefix) {
             let val = inputElement.value.trim().toUpperCase();
@@ -198,7 +206,7 @@
                     <td><input type="text" list="dsoHistory" class="input-upper dso-input" onblur="processHistory(this, 'dsoHistory', 'DSO')"></td>
                     <td><input type="text" list="dieHistory" class="input-upper die-input" onblur="processHistory(this, 'dieHistory', 'DIE')"></td>
                     
-                    <td><input type="text" maxlength="8" class="barcode-input bg-warning bg-opacity-10 fw-bold text-center" onchange="validateManualBarcode(this)" placeholder="SCAN SINI"></td>
+                    <td><input type="text" maxlength="8" class="barcode-input bg-warning bg-opacity-10 fw-bold text-center" onchange="validateManualBarcode(this)" placeholder="SCAN"></td>
                     
                     <td><select class="size-input">${sizeOptions}</select></td>
                     <td><input type="text" list="markingHistory" class="input-upper marking-input" onblur="processHistory(this, 'markingHistory', '')"></td>
@@ -207,7 +215,7 @@
                     <td><input type="number" min="1" max="100" class="row-input"></td>
                     <td><input type="number" min="1" max="100" class="col-input"></td>
                     <td><input type="number" min="1" max="10" class="tier-input"></td>
-                    <td class="text-center"><button class="btn btn-danger btn-sm" onclick="hapusBaris(this)"><i class="fas fa-trash"></i></button></td>
+                    <td class="text-center"><button class="btn btn-danger btn-sm btn-3d" onclick="hapusBaris(this)"><i class="fas fa-trash"></i></button></td>
                 `;
                 tbody.appendChild(tr);
             }
@@ -215,7 +223,7 @@
         }
 
         // ==========================================
-        // SISTEM ANTI-DUPLIKAT (Manual & Bluetooth)
+        // SISTEM ANTI-DUPLIKAT
         // ==========================================
         function validateManualBarcode(input) {
             let val = input.value.trim().toUpperCase();
@@ -230,15 +238,13 @@
                 }
             }
 
-            // Jika matchCount > 1, berarti nomor ini sudah ada di baris lain
             if(matchCount > 1) {
                 alert("GAGAL! Crate Nomor: " + val + " SUDAH ADA di daftar.");
-                input.value = ""; // Kosongkan
+                input.value = ""; 
                 input.focus();
                 return;
             }
 
-            // Jika lolos, isi tanggal
             fillDate(input);
         }
 
@@ -263,7 +269,7 @@
         }
 
         // ==========================================
-        // SISTEM KAMERA & ANTI-DUPLIKAT (Camera Scan)
+        // SISTEM KAMERA
         // ==========================================
         let html5QrcodeScanner;
         function startCameraScan() {
@@ -283,17 +289,15 @@
             let cleanText = decodedText.substring(0, 8).toUpperCase();
             const barcodeInputs = document.querySelectorAll('.barcode-input');
             
-            // 1. CEK DUPLIKAT DULU!
             for (let input of barcodeInputs) {
                 if (input.value.toUpperCase() === cleanText) {
                     stopCameraScan();
                     bootstrap.Modal.getInstance(document.getElementById('cameraModal')).hide();
                     alert("GAGAL SCAN! Crate Nomor: " + cleanText + " SUDAH ADA di daftar.");
-                    return; // Hentikan fungsi
+                    return; 
                 }
             }
 
-            // 2. JIKA AMAN, CARI BARIS KOSONG
             let foundEmpty = false;
             for (let input of barcodeInputs) {
                 if (input.value === "") {
@@ -302,7 +306,6 @@
                     foundEmpty = true;
                     beepSound();
                     
-                    // OTOMATIS TUTUP KAMERA
                     stopCameraScan();
                     bootstrap.Modal.getInstance(document.getElementById('cameraModal')).hide();
                     break;
@@ -322,33 +325,74 @@
         }
 
         // ==========================================
-        // SISTEM DRAFT (SIMPAN & HAPUS)
+        // SISTEM DRAFT UTUH (TIDAK DIPOTONG)
         // ==========================================
-        function newTransaction() { /* ... logika reset ... */ document.getElementById('tableBody').innerHTML = ""; addRows(20); }
+        function newTransaction() { 
+            if(confirm("Yakin ingin menghapus data di layar dan membuat transaksi baru?")) {
+                document.getElementById('shipmentId').value = ""; 
+                document.getElementById('noTruck').value = "";
+                document.getElementById('driver').value = ""; 
+                document.getElementById('totalCBM').value = "";
+                document.getElementById('totalGW').value = ""; 
+                document.getElementById('tableBody').innerHTML = ""; 
+                addRows(20); 
+            }
+        }
 
         function saveDraft() {
-            const noTruck = document.getElementById('noTruck').value.toUpperCase();
-            if(!noTruck) return alert("Isi Nomor Truk!");
-            // ... (logika simpan draft)
-            localStorage.setItem("WMS_DRAFT_" + noTruck, JSON.stringify({ /* dummy save */ }));
-            alert("Draft Truk " + noTruck + " disimpan!"); loadDraftMenu(); 
+            const noTruck = document.getElementById('noTruck').value.trim().toUpperCase();
+            if(!noTruck) return alert("Isi Nomor Truk sebelum menyimpan draft!");
+            
+            // Ambil Data Header
+            const headerData = { 
+                shipmentId: document.getElementById('shipmentId').value, 
+                noTruck: noTruck, 
+                driver: document.getElementById('driver').value, 
+                totalCBM: document.getElementById('totalCBM').value, 
+                totalGW: document.getElementById('totalGW').value 
+            };
+            
+            // Ambil Data Tabel Detail
+            const rowsData = [];
+            document.querySelectorAll('#tableBody tr').forEach(tr => {
+                const crate = tr.querySelector('.barcode-input').value;
+                if(crate !== "") { 
+                    rowsData.push({ 
+                        tgl: tr.querySelector('.tgl-input').value, 
+                        dso: tr.querySelector('.dso-input').value, 
+                        die: tr.querySelector('.die-input').value, 
+                        crate: crate, 
+                        size: tr.querySelector('.size-input').value, 
+                        marking: tr.querySelector('.marking-input').value, 
+                        thick: tr.querySelector('.thick-input').value, 
+                        bay: tr.querySelector('.bay-input').value, 
+                        row: tr.querySelector('.row-input').value, 
+                        col: tr.querySelector('.col-input').value, 
+                        tier: tr.querySelector('.tier-input').value
+                    });
+                }
+            });
+            
+            localStorage.setItem("WMS_DRAFT_" + noTruck, JSON.stringify({ header: headerData, details: rowsData }));
+            alert("Berhasil! Draft Truk " + noTruck + " sudah disimpan di perangkat ini."); 
+            loadDraftMenu(); 
         }
 
         function loadDraftMenu() {
-            const draftArea = document.getElementById('draftListArea'); draftArea.innerHTML = ""; 
+            const draftArea = document.getElementById('draftListArea'); 
+            draftArea.innerHTML = ""; 
             for (let i = 0; i < localStorage.length; i++) {
                 const key = localStorage.key(i);
                 if (key.startsWith("WMS_DRAFT_")) {
                     const noTruk = key.replace("WMS_DRAFT_", "");
-                    const div = document.createElement('div'); div.className = "draft-item";
+                    const div = document.createElement('div'); 
+                    div.className = "draft-item";
                     
-                    // Tombol nama Truk (Buka Draft)
                     const span = document.createElement('span'); 
                     span.innerHTML = `<i class="fas fa-file-signature text-warning me-2"></i>Truk ${noTruk}`;
                     span.onclick = () => { if(window.innerWidth <= 992) toggleSidebar(); openDraft(key); };
                     span.style.flexGrow = "1";
                     
-                    // Tombol Hapus Draft
                     const delBtn = document.createElement('i');
                     delBtn.className = "fas fa-trash text-danger";
                     delBtn.onclick = (e) => { e.stopPropagation(); deleteDraft(key); };
@@ -366,8 +410,46 @@
             }
         }
         
-        function openDraft(key) { /* ... logika buka draft ... */ }
-        function finalizeTransaction() { /* ... logika finalize ... */ }
+        function openDraft(key) { 
+            if(!confirm("Tampilkan draft ini ke layar kerja? (Pastikan draft sebelumnya sudah disimpan)")) return;
+            
+            const data = JSON.parse(localStorage.getItem(key));
+            document.getElementById('shipmentId').value = data.header.shipmentId; 
+            document.getElementById('noTruck').value = data.header.noTruck;
+            document.getElementById('driver').value = data.header.driver; 
+            document.getElementById('totalCBM').value = data.header.totalCBM; 
+            document.getElementById('totalGW').value = data.header.totalGW;
+            
+            document.getElementById('tableBody').innerHTML = ""; 
+            addRows(Math.max(20, data.details.length + 5));
+            
+            const trs = document.querySelectorAll('#tableBody tr');
+            data.details.forEach((det, idx) => {
+                trs[idx].querySelector('.tgl-input').value = det.tgl; 
+                trs[idx].querySelector('.dso-input').value = det.dso;
+                trs[idx].querySelector('.die-input').value = det.die; 
+                trs[idx].querySelector('.barcode-input').value = det.crate;
+                trs[idx].querySelector('.size-input').value = det.size; 
+                trs[idx].querySelector('.marking-input').value = det.marking;
+                trs[idx].querySelector('.thick-input').value = det.thick; 
+                trs[idx].querySelector('.bay-input').value = det.bay;
+                trs[idx].querySelector('.row-input').value = det.row; 
+                trs[idx].querySelector('.col-input').value = det.col;
+                trs[idx].querySelector('.tier-input').value = det.tier;
+            });
+        }
+        
+        function finalizeTransaction() { 
+            const noTruck = document.getElementById('noTruck').value.trim().toUpperCase();
+            if(!noTruck) return alert("Isi Nomor Truk sebelum Finalisasi!");
+            if(confirm("Apakah Anda yakin menyelesaikan transaksi Truk " + noTruck + "?")) {
+                localStorage.removeItem("WMS_DRAFT_" + noTruck);
+                alert("Sukses! Data dikunci dan dikirim.");
+                document.getElementById('tableBody').innerHTML = ""; 
+                addRows(20);
+                loadDraftMenu();
+            }
+        }
     </script>
 </body>
 </html>
