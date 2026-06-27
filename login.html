@@ -7,15 +7,58 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
     <style>
-        body { font-family: 'Poppins', sans-serif; background-color: #0d47a1; height: 100vh; display: flex; align-items: center; justify-content: center; }
-        .login-card { background: #fff; padding: 40px; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.2); width: 100%; max-width: 400px; }
-        .login-card img { max-height: 60px; margin-bottom: 20px; }
+        body { 
+            font-family: 'Poppins', sans-serif; 
+            /* Background Pelabuhan Kontainer */
+            background: url('https://images.unsplash.com/photo-1494412574643-ff11b0a5c1c3?q=80&w=2070&auto=format&fit=crop') no-repeat center center fixed; 
+            background-size: cover;
+            height: 100vh; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            margin: 0;
+        }
+        
+        /* Efek Kaca (Glassmorphism) */
+        .glass-card { 
+            background: rgba(255, 255, 255, 0.15); 
+            backdrop-filter: blur(12px); 
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            padding: 40px; 
+            border-radius: 20px; 
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37); 
+            width: 100%; 
+            max-width: 400px; 
+        }
+        
+        .glass-card img { max-height: 70px; margin-bottom: 25px; filter: drop-shadow(2px 4px 6px rgba(0,0,0,0.3)); }
+        .glass-card label, .glass-card h4 { color: #ffffff; text-shadow: 1px 1px 3px rgba(0,0,0,0.5); }
+        
+        .form-control { background: rgba(255, 255, 255, 0.8); border: none; font-weight: 600; }
+        .form-control:focus { background: #fff; box-shadow: 0 0 10px rgba(255, 193, 7, 0.5); }
+        
+        /* Efek Tombol 3D */
+        .btn-3d { 
+            background-color: #ff9800; 
+            color: #fff; 
+            border: none; 
+            border-radius: 10px; 
+            padding: 12px; 
+            box-shadow: 0 6px #c75600; /* Bayangan bawah */
+            transition: all 0.1s active; 
+        }
+        .btn-3d:active { 
+            box-shadow: 0 0 #c75600; /* Bayangan hilang saat ditekan */
+            transform: translateY(6px); /* Tombol turun */
+        }
+        .btn-3d:hover { background-color: #ffb74d; color: #fff;}
     </style>
 </head>
 <body>
 
-    <div class="login-card text-center">
-        <img src="dolwin logo.png" alt="Dolwin Group">
+    <div class="glass-card text-center">
+        <img src="dolwin logo.png" alt="Dolwin Group" onerror="this.src='https://via.placeholder.com/150x50?text=DOLWIN'">
         <h4 class="fw-bold mb-4">Portal Internal</h4>
         
         <form id="loginForm">
@@ -27,8 +70,8 @@
                 <label class="form-label small fw-bold">Password</label>
                 <input type="password" id="password" class="form-control" placeholder="Masukkan password" required>
             </div>
-            <button type="button" onclick="cekLogin()" class="btn btn-warning fw-bold w-100 mb-3">Masuk Sistem</button>
-            <a href="index.html" class="text-decoration-none small text-muted">Kembali ke Beranda</a>
+            <button type="button" onclick="cekLogin()" class="btn btn-3d fw-bold w-100 mb-4">MASUK SISTEM</button>
+            <a href="index.html" class="text-decoration-none small text-white fw-bold">Kembali ke Beranda</a>
         </form>
     </div>
 
@@ -36,10 +79,8 @@
         function cekLogin() {
             const user = document.getElementById('username').value;
             const pass = document.getElementById('password').value;
-
-            // Ini password sementara untuk tes sistem (Nanti kita amankan)
             if (user === 'pengawas' && pass === '123456') {
-                window.location.href = 'receiving.html';
+                window.location.href = 'app.html'; // Nanti kita buat file app.html
             } else {
                 alert('Username atau Password salah!');
             }
