@@ -7,6 +7,8 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
+    
     <style>
         body { font-family: 'Poppins', sans-serif; background-color: #f4f6f9; overflow-x: hidden; }
         .wrapper { display: flex; height: 100vh; }
@@ -35,6 +37,10 @@
         /* Draft Buttons */
         .draft-btn { background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.3); color: white; text-align: left; padding: 8px; font-size: 0.85rem; border-radius: 6px; transition: 0.3s; margin-bottom: 8px; cursor: pointer; }
         .draft-btn:hover { background: #ff9800; border-color: #ff9800; color: #fff; }
+
+        /* Scanner Modal UI Customization */
+        #reader { width: 100%; max-width: 500px; margin: 0 auto; border: 2px solid #0d47a1; border-radius: 10px; overflow: hidden; }
+        #reader__dashboard_section_csr button { background: #0d47a1; color: white; border: none; padding: 8px 15px; border-radius: 5px; margin: 5px; }
     </style>
 </head>
 <body>
@@ -59,8 +65,7 @@
             </select>
 
             <label>3. DRAFT TRANSAKSI</label>
-            <div id="draftListArea" class="flex-grow-1 overflow-auto mt-2 pe-1">
-                </div>
+            <div id="draftListArea" class="flex-grow-1 overflow-auto mt-2 pe-1"></div>
 
             <div class="mt-auto pt-3 border-top border-secondary">
                 <button class="btn btn-outline-light w-100 btn-sm" onclick="window.location.href='index.html'"><i class="fas fa-sign-out-alt me-2"></i>Keluar Sistem</button>
@@ -71,24 +76,9 @@
             <h4 class="fw-bold text-dark mb-4" id="pageTitle">Receiving - PT. SPF | Gudang 3 - Kuala</h4>
 
             <div class="row g-3 mb-4">
-                <div class="col-md-4">
-                    <div class="card dash-card bg-primary text-white p-3">
-                        <div class="small fw-bold opacity-75">TARGET SHIPMENT (CRATE)</div>
-                        <div class="dash-val" id="dashTarget">39.000</div>
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="card dash-card bg-success text-white p-3">
-                        <div class="small fw-bold opacity-75">SUDAH MASUK (GUDANG INI)</div>
-                        <div class="dash-val" id="dashMasuk">3.050</div>
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="card dash-card bg-danger text-white p-3">
-                        <div class="small fw-bold opacity-75">SISA BALANCE PABRIK</div>
-                        <div class="dash-val" id="dashSisa">35.950</div>
-                    </div>
-                </div>
+                <div class="col-md-4"><div class="card dash-card bg-primary text-white p-3"><div class="small fw-bold opacity-75">TARGET SHIPMENT (CRATE)</div><div class="dash-val" id="dashTarget">39.000</div></div></div>
+                <div class="col-md-4"><div class="card dash-card bg-success text-white p-3"><div class="small fw-bold opacity-75">SUDAH MASUK (GUDANG INI)</div><div class="dash-val" id="dashMasuk">3.050</div></div></div>
+                <div class="col-md-4"><div class="card dash-card bg-danger text-white p-3"><div class="small fw-bold opacity-75">SISA BALANCE PABRIK</div><div class="dash-val" id="dashSisa">35.950</div></div></div>
             </div>
 
             <div class="card dash-card p-3 mb-4">
@@ -102,30 +92,18 @@
                             <option value="IRN-001">IRN-001 | Bandar Abbas</option>
                         </select>
                     </div>
-                    <div class="col-md-3">
-                        <label class="small fw-bold">No Truk <span class="text-danger">*</span></label>
-                        <input type="text" id="noTruck" class="form-control form-control-sm input-upper" placeholder="Misal: BE 9090 XX">
-                    </div>
-                    <div class="col-md-2">
-                        <label class="small fw-bold">Driver</label>
-                        <input type="text" id="driver" class="form-control form-control-sm input-upper" placeholder="Nama Supir">
-                    </div>
-                    <div class="col-md-2">
-                        <label class="small fw-bold">Total CBM (SJ)</label>
-                        <input type="number" step="0.01" id="totalCBM" class="form-control form-control-sm" placeholder="0.00">
-                    </div>
-                    <div class="col-md-2">
-                        <label class="small fw-bold">Total GW (SJ)</label>
-                        <input type="number" step="0.01" id="totalGW" class="form-control form-control-sm" placeholder="0.00">
-                    </div>
+                    <div class="col-md-3"><label class="small fw-bold">No Truk <span class="text-danger">*</span></label><input type="text" id="noTruck" class="form-control form-control-sm input-upper" placeholder="Misal: BE 9090 XX"></div>
+                    <div class="col-md-2"><label class="small fw-bold">Driver</label><input type="text" id="driver" class="form-control form-control-sm input-upper" placeholder="Nama Supir"></div>
+                    <div class="col-md-2"><label class="small fw-bold">Total CBM (SJ)</label><input type="number" step="0.01" id="totalCBM" class="form-control form-control-sm" placeholder="0.00"></div>
+                    <div class="col-md-2"><label class="small fw-bold">Total GW (SJ)</label><input type="number" step="0.01" id="totalGW" class="form-control form-control-sm" placeholder="0.00"></div>
                 </div>
             </div>
 
             <div class="table-container">
                 <div class="d-flex justify-content-between align-items-center mb-3">
                     <h6 class="fw-bold text-primary m-0">Detail Scan Cargo (MDF)</h6>
-                    
                     <div class="d-flex gap-2">
+                        <button class="btn btn-info btn-sm fw-bold text-white shadow-sm" onclick="startCameraScan()" data-bs-toggle="modal" data-bs-target="#cameraModal"><i class="fas fa-camera"></i> Scan Kamera HP</button>
                         <button class="btn btn-outline-secondary btn-sm fw-bold" onclick="newTransaction()"><i class="fas fa-plus"></i> Transaksi Baru</button>
                         <button class="btn btn-warning btn-sm fw-bold shadow-sm" onclick="saveDraft()"><i class="fas fa-save"></i> Simpan Draft</button>
                         <button class="btn btn-success btn-sm fw-bold shadow-sm" onclick="finalizeTransaction()"><i class="fas fa-check-double"></i> Finalisasi Selesai</button>
@@ -160,6 +138,24 @@
         </div>
     </div>
 
+    <div class="modal fade" id="cameraModal" tabindex="-1" data-bs-backdrop="static">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header bg-info text-white">
+                    <h5 class="modal-title fw-bold"><i class="fas fa-camera me-2"></i>Scanner Kamera</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close" onclick="stopCameraScan()"></button>
+                </div>
+                <div class="modal-body text-center">
+                    <p class="small text-muted mb-2">Arahkan kamera ke Barcode Crate.</p>
+                    <div id="reader"></div>
+                </div>
+                <div class="modal-footer justify-content-center">
+                    <button type="button" class="btn btn-secondary fw-bold" data-bs-dismiss="modal" onclick="stopCameraScan()">Tutup Kamera</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <datalist id="dsoHistory"></datalist>
     <datalist id="dieHistory"></datalist>
     <datalist id="markingHistory"></datalist>
@@ -171,6 +167,7 @@
         <option value="RW 4"></option><option value="RW 5"></option><option value="RW 6"></option>
     </datalist>
 
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script>
         // INIT HALAMAN
         window.onload = function() {
@@ -201,7 +198,6 @@
             }
         }
 
-        // FUNGSI HISTORY AUTO-PREFIX
         function processHistory(inputElement, listId, prefix) {
             let val = inputElement.value.trim().toUpperCase();
             if (!val) return;
@@ -217,7 +213,6 @@
             }
         }
 
-        // GENERATE BARIS TABEL
         function addRows(count) {
             const tbody = document.getElementById('tableBody');
             let currentRows = tbody.rows.length;
@@ -262,9 +257,77 @@
         }
 
         // ==========================================
+        // SISTEM KAMERA SCANNER (HTML5-QRCODE)
+        // ==========================================
+        let html5QrcodeScanner;
+
+        function startCameraScan() {
+            // Memberikan sedikit waktu agar modal terbuka dulu, baru kamera render
+            setTimeout(() => {
+                if (!html5QrcodeScanner) {
+                    html5QrcodeScanner = new Html5QrcodeScanner(
+                        "reader", { fps: 10, qrbox: { width: 250, height: 100 } }, false);
+                    html5QrcodeScanner.render(onScanSuccess, onScanFailure);
+                }
+            }, 300);
+        }
+
+        function stopCameraScan() {
+            if (html5QrcodeScanner) {
+                html5QrcodeScanner.clear().catch(error => {
+                    console.error("Failed to clear html5QrcodeScanner. ", error);
+                });
+                html5QrcodeScanner = null;
+            }
+        }
+
+        function onScanSuccess(decodedText, decodedResult) {
+            // Sanitasi: Ambil 8 digit saja
+            let cleanText = decodedText.substring(0, 8);
+            
+            // Cari baris input barcode yang masih KOSONG
+            const barcodeInputs = document.querySelectorAll('.barcode-input');
+            let foundEmpty = false;
+
+            for (let input of barcodeInputs) {
+                if (input.value === "") {
+                    input.value = cleanText;
+                    fillDate(input); // Otomatis isi tanggal
+                    foundEmpty = true;
+                    
+                    // Suara bip pendek saat berhasil
+                    beepSound();
+                    break; // Berhenti mencari setelah nemu baris kosong
+                }
+            }
+
+            if (!foundEmpty) {
+                alert("Tabel sudah penuh! Silakan Tambah Baris terlebih dahulu.");
+                stopCameraScan();
+                let modal = bootstrap.Modal.getInstance(document.getElementById('cameraModal'));
+                modal.hide();
+            }
+        }
+
+        function onScanFailure(error) {
+            // Abaikan error saat proses mencari barcode (karena frame berjalan terus)
+        }
+
+        // Fungsi kecil pembuat suara Bip
+        function beepSound() {
+            const context = new (window.AudioContext || window.webkitAudioContext)();
+            const oscillator = context.createOscillator();
+            const contextGain = context.createGain();
+            oscillator.type = 'sine';
+            oscillator.connect(contextGain);
+            contextGain.connect(context.destination);
+            oscillator.start();
+            setTimeout(function () { oscillator.stop(); }, 150); // Bip pendek 150ms
+        }
+
+        // ==========================================
         // SISTEM DRAFT & MEMORI (LOCAL STORAGE)
         // ==========================================
-
         function newTransaction() {
             if(confirm("Buat transaksi baru? Data di layar akan dikosongkan (Pastikan sudah di-save/draft).")) {
                 document.getElementById('shipmentId').value = "";
@@ -272,21 +335,15 @@
                 document.getElementById('driver').value = "";
                 document.getElementById('totalCBM').value = "";
                 document.getElementById('totalGW').value = "";
-                
-                document.getElementById('tableBody').innerHTML = ""; // Bersihkan tabel
-                addRows(20); // Buat 20 baris baru
+                document.getElementById('tableBody').innerHTML = ""; 
+                addRows(20); 
             }
         }
 
         function saveDraft() {
             const noTruck = document.getElementById('noTruck').value.trim().toUpperCase();
-            if(!noTruck) {
-                alert("Nomor Truk WAJIB diisi untuk menyimpan Draft!");
-                document.getElementById('noTruck').focus();
-                return;
-            }
+            if(!noTruck) { alert("Nomor Truk WAJIB diisi untuk menyimpan Draft!"); document.getElementById('noTruck').focus(); return; }
 
-            // Ambil data header
             const headerData = {
                 shipmentId: document.getElementById('shipmentId').value,
                 noTruck: noTruck,
@@ -295,24 +352,17 @@
                 totalGW: document.getElementById('totalGW').value
             };
 
-            // Ambil data tabel (detail)
             const rowsData = [];
             const trs = document.querySelectorAll('#tableBody tr');
             trs.forEach(tr => {
                 const crate = tr.querySelector('.barcode-input').value;
-                if(crate !== "") { // Hanya simpan baris yang ada isinya (barcode terisi)
+                if(crate !== "") { 
                     rowsData.push({
-                        tgl: tr.querySelector('.tgl-input').value,
-                        dso: tr.querySelector('.dso-input').value,
-                        die: tr.querySelector('.die-input').value,
-                        crate: crate,
-                        size: tr.querySelector('.size-input').value,
-                        marking: tr.querySelector('.marking-input').value,
-                        thick: tr.querySelector('.thick-input').value,
-                        bay: tr.querySelector('.bay-input').value,
-                        row: tr.querySelector('.row-input').value,
-                        col: tr.querySelector('.col-input').value,
-                        tier: tr.querySelector('.tier-input').value,
+                        tgl: tr.querySelector('.tgl-input').value, dso: tr.querySelector('.dso-input').value,
+                        die: tr.querySelector('.die-input').value, crate: crate, size: tr.querySelector('.size-input').value,
+                        marking: tr.querySelector('.marking-input').value, thick: tr.querySelector('.thick-input').value,
+                        bay: tr.querySelector('.bay-input').value, row: tr.querySelector('.row-input').value,
+                        col: tr.querySelector('.col-input').value, tier: tr.querySelector('.tier-input').value,
                         ket: tr.querySelector('.ket-input').value
                     });
                 }
@@ -322,13 +372,12 @@
             localStorage.setItem("WMS_DRAFT_" + noTruck, JSON.stringify(draftData));
             
             alert("Draft Truk " + noTruck + " berhasil disimpan ke memori!");
-            loadDraftMenu(); // Perbarui sidebar
+            loadDraftMenu(); 
         }
 
         function loadDraftMenu() {
             const draftArea = document.getElementById('draftListArea');
-            draftArea.innerHTML = ""; // Bersihkan
-            
+            draftArea.innerHTML = ""; 
             for (let i = 0; i < localStorage.length; i++) {
                 const key = localStorage.key(i);
                 if (key.startsWith("WMS_DRAFT_")) {
@@ -345,8 +394,6 @@
         function openDraft(key) {
             if(confirm("Tampilkan data draft ini ke layar kerja?")) {
                 const data = JSON.parse(localStorage.getItem(key));
-                
-                // Isi Header
                 document.getElementById('shipmentId').value = data.header.shipmentId;
                 document.getElementById('noTruck').value = data.header.noTruck;
                 document.getElementById('driver').value = data.header.driver;
@@ -354,43 +401,31 @@
                 document.getElementById('totalGW').value = data.header.totalGW;
                 simulateDashboard();
 
-                // Isi Tabel
-                document.getElementById('tableBody').innerHTML = ""; // Kosongkan
-                const requiredRows = Math.max(20, data.details.length + 5); // Beri sisa 5 baris kosong
+                document.getElementById('tableBody').innerHTML = ""; 
+                const requiredRows = Math.max(20, data.details.length + 5); 
                 addRows(requiredRows);
 
                 const trs = document.querySelectorAll('#tableBody tr');
                 data.details.forEach((detail, index) => {
                     const tr = trs[index];
-                    tr.querySelector('.tgl-input').value = detail.tgl;
-                    tr.querySelector('.dso-input').value = detail.dso;
-                    tr.querySelector('.die-input').value = detail.die;
-                    tr.querySelector('.barcode-input').value = detail.crate;
-                    tr.querySelector('.size-input').value = detail.size;
-                    tr.querySelector('.marking-input').value = detail.marking;
-                    tr.querySelector('.thick-input').value = detail.thick;
-                    tr.querySelector('.bay-input').value = detail.bay;
-                    tr.querySelector('.row-input').value = detail.row;
-                    tr.querySelector('.col-input').value = detail.col;
-                    tr.querySelector('.tier-input').value = detail.tier;
-                    tr.querySelector('.ket-input').value = detail.ket;
+                    tr.querySelector('.tgl-input').value = detail.tgl; tr.querySelector('.dso-input').value = detail.dso;
+                    tr.querySelector('.die-input').value = detail.die; tr.querySelector('.barcode-input').value = detail.crate;
+                    tr.querySelector('.size-input').value = detail.size; tr.querySelector('.marking-input').value = detail.marking;
+                    tr.querySelector('.thick-input').value = detail.thick; tr.querySelector('.bay-input').value = detail.bay;
+                    tr.querySelector('.row-input').value = detail.row; tr.querySelector('.col-input').value = detail.col;
+                    tr.querySelector('.tier-input').value = detail.tier; tr.querySelector('.ket-input').value = detail.ket;
                 });
             }
         }
 
         function finalizeTransaction() {
             const noTruck = document.getElementById('noTruck').value.trim().toUpperCase();
-            if(!noTruck) {
-                alert("Isi Nomor Truk sebelum Finalisasi!"); return;
-            }
+            if(!noTruck) { alert("Isi Nomor Truk sebelum Finalisasi!"); return; }
             if(confirm("Kunci dan Selesaikan Transaksi Truk " + noTruck + "? Data tidak bisa diubah lagi oleh Pengawas.")) {
-                // Di sistem asli, ini kirim data ke Database Server.
-                // Karena masih frontend, kita cukup hapus dari draft dan bersihkan layar.
                 localStorage.removeItem("WMS_DRAFT_" + noTruck);
                 alert("Sukses! Data Transaksi terkirim ke Server/Admin.");
-                
-                newTransaction(); // Bersihkan layar tanpa konfirmasi lagi
-                loadDraftMenu(); // Perbarui daftar sidebar
+                newTransaction(); 
+                loadDraftMenu(); 
             }
         }
     </script>
