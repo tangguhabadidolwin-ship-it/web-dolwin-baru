@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistem Receiving - Dolwin Group</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .hidden { display: none; }
+        .table-input { border-collapse: separate; border-spacing: 0; }
+        .table-input input { border: none; width: 100%; }
+        .table-input input:focus { outline: none; background: #fffde7; }
+    </style>
+</head>
+<body class="bg-light">
+
+    <!-- 1. GATEWAY: Pilih Shipper -->
+    <div id="gatewaySection" class="container mt-5">
+        <h2 class="text-center fw-bold mb-4">Pilih Shipper / Klien</h2>
+        <div class="row g-4 justify-content-center">
+            <div class="col-md-3"><button onclick="loadForm('SPF')" class="btn btn-primary w-100 py-4 shadow">PT. SPF (Scan)</button></div>
+            <div class="col-md-3"><button onclick="loadForm('MPI')" class="btn btn-success w-100 py-4 shadow">PT. MPI (SI Data)</button></div>
+            <div class="col-md-3"><button onclick="loadForm('HIJAU')" class="btn btn-warning w-100 py-4 shadow">PT. HIJAU (SI Data)</button></div>
+        </div>
+    </div>
+
+    <!-- 2. FORM RECEIVING (Hidden by default) -->
+    <div id="formSection" class="container mt-5 hidden">
+        <div class="card shadow border-0 p-4">
+            <h4 id="formTitle" class="fw-bold mb-4">Penerimaan Cargo - [Shipper Name]</h4>
+            
+            <!-- Header Truck -->
+            <div class="row g-3 mb-4">
+                <div class="col-md-3"><label class="small">No Truk</label><input type="text" id="noTruck" class="form-control"></div>
+                <div class="col-md-3"><label class="small">Driver</label><input type="text" id="driver" class="form-control"></div>
+                <div class="col-md-3"><label class="small">Shipment ID</label><input type="text" id="shipmentId" class="form-control"></div>
+                <div class="col-md-3"><label class="small">Tujuan</label><input type="text" id="tujuan" class="form-control"></div>
+            </div>
+
+            <!-- Tabel Dinamis (Dynamic Rows) -->
+            <table class="table table-bordered table-input" id="scanTable">
+                <thead>
+                    <tr><th>No</th><th>No Crate (Scan)</th><th>Size</th><th>Alokasi (Tier/Row)</th></tr>
+                </thead>
+                <tbody id="tableBody">
+                    <!-- Baris akan muncul otomatis pakai JS -->
+                </tbody>
+            </table>
+            <button class="btn btn-secondary btn-sm" onclick="addRow()">Tambah Baris</button>
+            <button class="btn btn-primary w-100 mt-4 py-2" onclick="saveTransaction()">Simpan & Selesai</button>
+        </div>
+    </div>
+
+    <script>
+        // Fungsi dasar untuk pindah form
+        function loadForm(shipper) {
+            document.getElementById('gatewaySection').classList.add('hidden');
+            document.getElementById('formSection').classList.remove('hidden');
+            document.getElementById('formTitle').innerText = "Penerimaan Cargo - " + shipper;
+            initTable();
+        }
+
+        // Generate 20 baris pertama
+        function initTable() {
+            const body = document.getElementById('tableBody');
+            for(let i=1; i<=20; i++) {
+                addRow(i);
+            }
+        }
+
+        function addRow(index) {
+            const row = `<tr><td>${index || document.getElementById('tableBody').rows.length + 1}</td>
+                <td><input type="text" class="scan-input" placeholder="Scan Barcode..."></td>
+                <td><input type="text" placeholder="Size..."></td>
+                <td><input type="text" placeholder="Tier/Row..."></td></tr>`;
+            document.getElementById('tableBody').innerHTML += row;
+        }
+    </script>
+</body>
+</html>
