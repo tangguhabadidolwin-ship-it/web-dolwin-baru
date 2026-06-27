@@ -11,20 +11,20 @@
     
     <style>
         body { font-family: 'Poppins', sans-serif; background-color: #f4f6f9; overflow-x: hidden; }
-        .wrapper { display: flex; height: 100vh; }
+        .wrapper { display: flex; height: 100vh; width: 100%; position: relative; }
         
-        /* Sidebar */
-        .sidebar { width: 260px; background: #0d47a1; color: white; padding: 20px; flex-shrink: 0; display: flex; flex-direction: column; }
+        /* Sidebar Default (Laptop) */
+        .sidebar { width: 260px; background: #0d47a1; color: white; padding: 20px; flex-shrink: 0; display: flex; flex-direction: column; z-index: 1040; transition: transform 0.3s ease-in-out; }
         .sidebar .brand { font-size: 1.2rem; font-weight: 700; color: #ffc107; text-align: center; margin-bottom: 20px; }
         .sidebar label { font-size: 0.85rem; font-weight: 600; color: #90caf9; margin-bottom: 5px; margin-top: 15px; }
         
         /* Main Content */
-        .main-content { flex-grow: 1; padding: 20px; overflow-y: auto; }
+        .main-content { flex-grow: 1; padding: 20px; overflow-y: auto; width: 100%; }
         .dash-card { border-radius: 12px; border: none; box-shadow: 0 4px 6px rgba(0,0,0,0.05); }
         .dash-val { font-size: 1.8rem; font-weight: 700; }
         
         /* Table */
-        .table-container { background: #fff; padding: 20px; border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
+        .table-container { background: #fff; padding: 20px; border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); width: 100%; }
         .table-input th { font-size: 0.75rem; text-align: center; background-color: #e9ecef; white-space: nowrap; }
         .table-input td { padding: 4px; vertical-align: middle; }
         .table-input input, .table-input select { border: 1px solid #dee2e6; width: 100%; padding: 6px; font-size: 0.75rem; border-radius: 4px; }
@@ -38,16 +38,48 @@
         .draft-btn { background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.3); color: white; text-align: left; padding: 8px; font-size: 0.85rem; border-radius: 6px; transition: 0.3s; margin-bottom: 8px; cursor: pointer; }
         .draft-btn:hover { background: #ff9800; border-color: #ff9800; color: #fff; }
 
-        /* Scanner Modal UI Customization */
-        #reader { width: 100%; max-width: 500px; margin: 0 auto; border: 2px solid #0d47a1; border-radius: 10px; overflow: hidden; }
-        #reader__dashboard_section_csr button { background: #0d47a1; color: white; border: none; padding: 8px 15px; border-radius: 5px; margin: 5px; }
+        /* Scanner Modal */
+        #reader { width: 100%; border: 2px solid #0d47a1; border-radius: 10px; overflow: hidden; }
+
+        /* =========================================
+           RESPONSIVE MOBILE & TABLET (Max 992px)
+           ========================================= */
+        @media (max-width: 992px) {
+            .sidebar { 
+                position: fixed; 
+                top: 0; left: 0; bottom: 0; 
+                transform: translateX(-100%); /* Sembunyikan ke kiri */
+            }
+            .sidebar.active { 
+                transform: translateX(0); /* Munculkan */
+            }
+            .main-content { 
+                padding: 15px; 
+            }
+            .table-container { 
+                padding: 15px; 
+            }
+        }
+
+        /* Latar Belakang Gelap saat Menu Terbuka di HP */
+        .sidebar-backdrop {
+            display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0,0,0,0.5); z-index: 1030;
+        }
+        .sidebar-backdrop.active { display: block; }
+
     </style>
 </head>
 <body>
 
     <div class="wrapper">
-        <div class="sidebar shadow-lg">
-            <div class="brand"><i class="fas fa-ship me-2"></i>DOLWIN WMS</div>
+        <div class="sidebar-backdrop" id="sidebarBackdrop" onclick="toggleSidebar()"></div>
+
+        <div class="sidebar shadow-lg" id="sidebar">
+            <div class="brand d-flex justify-content-between align-items-center">
+                <span><i class="fas fa-ship me-2"></i>DOLWIN WMS</span>
+                <button class="btn btn-sm btn-outline-light d-lg-none" onclick="toggleSidebar()"><i class="fas fa-times"></i></button>
+            </div>
             <hr class="border-secondary">
             <label>1. PILIH KLIEN / SHIPPER</label>
             <select class="form-select mb-2" id="shipperSelect" onchange="updateTitle()">
@@ -73,18 +105,21 @@
         </div>
 
         <div class="main-content bg-light">
-            <h4 class="fw-bold text-dark mb-4" id="pageTitle">Receiving - PT. SPF | Gudang 3 - Kuala</h4>
+            <div class="d-flex align-items-center mb-4">
+                <button class="btn btn-primary d-lg-none me-3 shadow-sm" onclick="toggleSidebar()"><i class="fas fa-bars"></i></button>
+                <h4 class="fw-bold text-dark m-0" id="pageTitle" style="font-size: 1.2rem;">Receiving - PT. SPF | Gudang 3</h4>
+            </div>
 
             <div class="row g-3 mb-4">
-                <div class="col-md-4"><div class="card dash-card bg-primary text-white p-3"><div class="small fw-bold opacity-75">TARGET SHIPMENT (CRATE)</div><div class="dash-val" id="dashTarget">39.000</div></div></div>
-                <div class="col-md-4"><div class="card dash-card bg-success text-white p-3"><div class="small fw-bold opacity-75">SUDAH MASUK (GUDANG INI)</div><div class="dash-val" id="dashMasuk">3.050</div></div></div>
-                <div class="col-md-4"><div class="card dash-card bg-danger text-white p-3"><div class="small fw-bold opacity-75">SISA BALANCE PABRIK</div><div class="dash-val" id="dashSisa">35.950</div></div></div>
+                <div class="col-12 col-md-4"><div class="card dash-card bg-primary text-white p-3"><div class="small fw-bold opacity-75">TARGET (CRATE)</div><div class="dash-val" id="dashTarget">39.000</div></div></div>
+                <div class="col-12 col-md-4"><div class="card dash-card bg-success text-white p-3"><div class="small fw-bold opacity-75">SUDAH MASUK</div><div class="dash-val" id="dashMasuk">3.050</div></div></div>
+                <div class="col-12 col-md-4"><div class="card dash-card bg-danger text-white p-3"><div class="small fw-bold opacity-75">SISA PABRIK</div><div class="dash-val" id="dashSisa">35.950</div></div></div>
             </div>
 
             <div class="card dash-card p-3 mb-4">
                 <div class="row g-3">
-                    <div class="col-md-3">
-                        <label class="small fw-bold">ID Tujuan / Shipment</label>
+                    <div class="col-12 col-md-3">
+                        <label class="small fw-bold">ID Tujuan</label>
                         <select class="form-select form-select-sm border-primary" id="shipmentId" onchange="simulateDashboard()">
                             <option value="">-- Pilih Tujuan --</option>
                             <option value="DAM-001">DAM-001 | Damietta 1</option>
@@ -92,21 +127,21 @@
                             <option value="IRN-001">IRN-001 | Bandar Abbas</option>
                         </select>
                     </div>
-                    <div class="col-md-3"><label class="small fw-bold">No Truk <span class="text-danger">*</span></label><input type="text" id="noTruck" class="form-control form-control-sm input-upper" placeholder="Misal: BE 9090 XX"></div>
-                    <div class="col-md-2"><label class="small fw-bold">Driver</label><input type="text" id="driver" class="form-control form-control-sm input-upper" placeholder="Nama Supir"></div>
-                    <div class="col-md-2"><label class="small fw-bold">Total CBM (SJ)</label><input type="number" step="0.01" id="totalCBM" class="form-control form-control-sm" placeholder="0.00"></div>
-                    <div class="col-md-2"><label class="small fw-bold">Total GW (SJ)</label><input type="number" step="0.01" id="totalGW" class="form-control form-control-sm" placeholder="0.00"></div>
+                    <div class="col-6 col-md-3"><label class="small fw-bold">No Truk <span class="text-danger">*</span></label><input type="text" id="noTruck" class="form-control form-control-sm input-upper" placeholder="Misal: BE 9090 XX"></div>
+                    <div class="col-6 col-md-2"><label class="small fw-bold">Driver</label><input type="text" id="driver" class="form-control form-control-sm input-upper" placeholder="Nama Supir"></div>
+                    <div class="col-6 col-md-2"><label class="small fw-bold">Total CBM</label><input type="number" step="0.01" id="totalCBM" class="form-control form-control-sm" placeholder="0.00"></div>
+                    <div class="col-6 col-md-2"><label class="small fw-bold">Total GW</label><input type="number" step="0.01" id="totalGW" class="form-control form-control-sm" placeholder="0.00"></div>
                 </div>
             </div>
 
             <div class="table-container">
-                <div class="d-flex justify-content-between align-items-center mb-3">
+                <div class="d-flex flex-column flex-lg-row justify-content-between align-items-lg-center mb-3 gap-3">
                     <h6 class="fw-bold text-primary m-0">Detail Scan Cargo (MDF)</h6>
-                    <div class="d-flex gap-2">
-                        <button class="btn btn-info btn-sm fw-bold text-white shadow-sm" onclick="startCameraScan()" data-bs-toggle="modal" data-bs-target="#cameraModal"><i class="fas fa-camera"></i> Scan Kamera HP</button>
-                        <button class="btn btn-outline-secondary btn-sm fw-bold" onclick="newTransaction()"><i class="fas fa-plus"></i> Transaksi Baru</button>
-                        <button class="btn btn-warning btn-sm fw-bold shadow-sm" onclick="saveDraft()"><i class="fas fa-save"></i> Simpan Draft</button>
-                        <button class="btn btn-success btn-sm fw-bold shadow-sm" onclick="finalizeTransaction()"><i class="fas fa-check-double"></i> Finalisasi Selesai</button>
+                    <div class="d-flex flex-wrap gap-2">
+                        <button class="btn btn-info btn-sm fw-bold text-white shadow-sm flex-grow-1" onclick="startCameraScan()" data-bs-toggle="modal" data-bs-target="#cameraModal"><i class="fas fa-camera"></i> Scan Kamera HP</button>
+                        <button class="btn btn-outline-secondary btn-sm fw-bold flex-grow-1" onclick="newTransaction()"><i class="fas fa-plus"></i> Transaksi Baru</button>
+                        <button class="btn btn-warning btn-sm fw-bold shadow-sm flex-grow-1" onclick="saveDraft()"><i class="fas fa-save"></i> Simpan Draft</button>
+                        <button class="btn btn-success btn-sm fw-bold shadow-sm flex-grow-1" onclick="finalizeTransaction()"><i class="fas fa-check-double"></i> Finalisasi</button>
                     </div>
                 </div>
                 
@@ -133,7 +168,7 @@
                             </tbody>
                     </table>
                 </div>
-                <button class="btn btn-secondary btn-sm mt-2" onclick="addRows(10)"><i class="fas fa-plus"></i> Tambah 10 Baris</button>
+                <button class="btn btn-secondary btn-sm mt-3 w-100 w-lg-auto" onclick="addRows(10)"><i class="fas fa-plus"></i> Tambah 10 Baris</button>
             </div>
         </div>
     </div>
@@ -145,7 +180,7 @@
                     <h5 class="modal-title fw-bold"><i class="fas fa-camera me-2"></i>Scanner Kamera</h5>
                     <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close" onclick="stopCameraScan()"></button>
                 </div>
-                <div class="modal-body text-center">
+                <div class="modal-body text-center p-2 p-md-3">
                     <p class="small text-muted mb-2">Arahkan kamera ke Barcode Crate.</p>
                     <div id="reader"></div>
                 </div>
@@ -156,10 +191,8 @@
         </div>
     </div>
 
-    <datalist id="dsoHistory"></datalist>
-    <datalist id="dieHistory"></datalist>
-    <datalist id="markingHistory"></datalist>
-    <datalist id="thickHistory"></datalist>
+    <datalist id="dsoHistory"></datalist><datalist id="dieHistory"></datalist>
+    <datalist id="markingHistory"></datalist><datalist id="thickHistory"></datalist>
     <datalist id="bayList">
         <option value="BAY A"></option><option value="BAY B"></option><option value="BAY C"></option>
         <option value="BAY D"></option><option value="BAY E"></option><option value="BAY F"></option>
@@ -170,15 +203,19 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script>
         // INIT HALAMAN
-        window.onload = function() {
-            addRows(20);
-            loadDraftMenu();
-        };
+        window.onload = function() { addRows(20); loadDraftMenu(); };
+
+        // FUNGSI TOGGLE SIDEBAR UNTUK HP
+        function toggleSidebar() {
+            document.getElementById('sidebar').classList.toggle('active');
+            document.getElementById('sidebarBackdrop').classList.toggle('active');
+        }
 
         function updateTitle() {
             const shipper = document.getElementById('shipperSelect');
             const gudang = document.getElementById('gudangSelect').value;
-            document.getElementById('pageTitle').innerText = "Receiving - " + shipper.options[shipper.selectedIndex].text + " | " + gudang;
+            let gudangPendek = gudang.split(' - ')[0]; // Singkat nama gudang untuk HP
+            document.getElementById('pageTitle').innerText = shipper.options[shipper.selectedIndex].text + " | " + gudangPendek;
         }
 
         function simulateDashboard() {
@@ -203,13 +240,11 @@
             if (!val) return;
             if (prefix && !val.startsWith(prefix)) { val = prefix + val; inputElement.value = val; } 
             else { inputElement.value = val; }
-
             const dataList = document.getElementById(listId);
             const options = Array.from(dataList.options).map(opt => opt.value);
             if (!options.includes(val)) {
                 const newOption = document.createElement('option');
-                newOption.value = val;
-                dataList.appendChild(newOption);
+                newOption.value = val; dataList.appendChild(newOption);
             }
         }
 
@@ -223,23 +258,22 @@
                 <option value="1830 X 2440">1830 X 2440</option><option value="1830 X 3660">1830 X 3660</option>
                 <option value="2100 X 2800">2100 X 2800</option><option value="2200 X 2800">2200 X 2800</option>
             `;
-
             for(let i = 1; i <= count; i++) {
                 currentRows++;
                 const tr = document.createElement('tr');
                 tr.innerHTML = `
                     <td class="text-center fw-bold">${currentRows}</td>
-                    <td><input type="text" class="tgl-input" readonly placeholder="Auto Date" style="background:#f8f9fa;"></td>
-                    <td><input type="text" list="dsoHistory" class="input-upper dso-input" placeholder="Angka DSO" onblur="processHistory(this, 'dsoHistory', 'DSO')"></td>
-                    <td><input type="text" list="dieHistory" class="input-upper die-input" placeholder="Angka DIE" onblur="processHistory(this, 'dieHistory', 'DIE')"></td>
+                    <td><input type="text" class="tgl-input" readonly placeholder="Auto Date" style="background:#f8f9fa; font-size:0.7rem;"></td>
+                    <td><input type="text" list="dsoHistory" class="input-upper dso-input" placeholder="DSO" onblur="processHistory(this, 'dsoHistory', 'DSO')"></td>
+                    <td><input type="text" list="dieHistory" class="input-upper die-input" placeholder="DIE" onblur="processHistory(this, 'dieHistory', 'DIE')"></td>
                     <td><input type="text" maxlength="8" class="barcode-input bg-warning bg-opacity-10 fw-bold text-center" oninput="this.value = this.value.substring(0, 8); fillDate(this)"></td>
                     <td><select class="size-input">${sizeOptions}</select></td>
-                    <td><input type="text" list="markingHistory" class="input-upper marking-input" placeholder="Ketikan" onblur="processHistory(this, 'markingHistory', '')"></td>
-                    <td><input type="text" list="thickHistory" class="input-upper thick-input" placeholder="Angka" onblur="processHistory(this, 'thickHistory', '')"></td>
-                    <td><input list="bayList" class="input-upper bay-input" placeholder="Pilih/Ketik"></td>
-                    <td><input type="number" min="1" max="100" class="row-input" placeholder="1-100"></td>
-                    <td><input type="number" min="1" max="100" class="col-input" placeholder="1-100"></td>
-                    <td><input type="number" min="1" max="10" class="tier-input" placeholder="1-10"></td>
+                    <td><input type="text" list="markingHistory" class="input-upper marking-input" placeholder="Marking" onblur="processHistory(this, 'markingHistory', '')"></td>
+                    <td><input type="text" list="thickHistory" class="input-upper thick-input" placeholder="Thick" onblur="processHistory(this, 'thickHistory', '')"></td>
+                    <td><input list="bayList" class="input-upper bay-input" placeholder="Area"></td>
+                    <td><input type="number" min="1" max="100" class="row-input" placeholder="R"></td>
+                    <td><input type="number" min="1" max="100" class="col-input" placeholder="C"></td>
+                    <td><input type="number" min="1" max="10" class="tier-input" placeholder="T"></td>
                     <td><input type="text" class="ket-input"></td>
                 `;
                 tbody.appendChild(tr);
@@ -257,16 +291,29 @@
         }
 
         // ==========================================
-        // SISTEM KAMERA SCANNER (HTML5-QRCODE)
+        // SISTEM KAMERA SCANNER (DIPAKSA KAMERA BELAKANG)
         // ==========================================
         let html5QrcodeScanner;
 
         function startCameraScan() {
-            // Memberikan sedikit waktu agar modal terbuka dulu, baru kamera render
             setTimeout(() => {
                 if (!html5QrcodeScanner) {
                     html5QrcodeScanner = new Html5QrcodeScanner(
-                        "reader", { fps: 10, qrbox: { width: 250, height: 100 } }, false);
+                        "reader", 
+                        { 
+                            fps: 10, 
+                            // Membuat kotak scan responsif menyesuaikan layar HP
+                            qrbox: function(viewfinderWidth, viewfinderHeight) {
+                                return { width: viewfinderWidth * 0.7, height: 100 };
+                            },
+                            // INI KUNCI UNTUK MEMAKSA KAMERA BELAKANG:
+                            videoConstraints: {
+                                facingMode: "environment"
+                            },
+                            rememberLastUsedCamera: true
+                        }, 
+                        false
+                    );
                     html5QrcodeScanner.render(onScanSuccess, onScanFailure);
                 }
             }, 300);
@@ -274,30 +321,23 @@
 
         function stopCameraScan() {
             if (html5QrcodeScanner) {
-                html5QrcodeScanner.clear().catch(error => {
-                    console.error("Failed to clear html5QrcodeScanner. ", error);
-                });
+                html5QrcodeScanner.clear().catch(err => console.error(err));
                 html5QrcodeScanner = null;
             }
         }
 
         function onScanSuccess(decodedText, decodedResult) {
-            // Sanitasi: Ambil 8 digit saja
             let cleanText = decodedText.substring(0, 8);
-            
-            // Cari baris input barcode yang masih KOSONG
             const barcodeInputs = document.querySelectorAll('.barcode-input');
             let foundEmpty = false;
 
             for (let input of barcodeInputs) {
                 if (input.value === "") {
                     input.value = cleanText;
-                    fillDate(input); // Otomatis isi tanggal
+                    fillDate(input); 
                     foundEmpty = true;
-                    
-                    // Suara bip pendek saat berhasil
                     beepSound();
-                    break; // Berhenti mencari setelah nemu baris kosong
+                    break;
                 }
             }
 
@@ -309,11 +349,8 @@
             }
         }
 
-        function onScanFailure(error) {
-            // Abaikan error saat proses mencari barcode (karena frame berjalan terus)
-        }
+        function onScanFailure(error) { /* Abaikan */ }
 
-        // Fungsi kecil pembuat suara Bip
         function beepSound() {
             const context = new (window.AudioContext || window.webkitAudioContext)();
             const oscillator = context.createOscillator();
@@ -322,98 +359,67 @@
             oscillator.connect(contextGain);
             contextGain.connect(context.destination);
             oscillator.start();
-            setTimeout(function () { oscillator.stop(); }, 150); // Bip pendek 150ms
+            setTimeout(function () { oscillator.stop(); }, 150); 
         }
 
         // ==========================================
-        // SISTEM DRAFT & MEMORI (LOCAL STORAGE)
+        // SISTEM DRAFT & MEMORI 
         // ==========================================
         function newTransaction() {
-            if(confirm("Buat transaksi baru? Data di layar akan dikosongkan (Pastikan sudah di-save/draft).")) {
-                document.getElementById('shipmentId').value = "";
-                document.getElementById('noTruck').value = "";
-                document.getElementById('driver').value = "";
-                document.getElementById('totalCBM').value = "";
-                document.getElementById('totalGW').value = "";
-                document.getElementById('tableBody').innerHTML = ""; 
+            if(confirm("Buat transaksi baru? Pastikan data sudah di-save/draft.")) {
+                document.getElementById('shipmentId').value = ""; document.getElementById('noTruck').value = "";
+                document.getElementById('driver').value = ""; document.getElementById('totalCBM').value = "";
+                document.getElementById('totalGW').value = ""; document.getElementById('tableBody').innerHTML = ""; 
                 addRows(20); 
             }
         }
 
         function saveDraft() {
             const noTruck = document.getElementById('noTruck').value.trim().toUpperCase();
-            if(!noTruck) { alert("Nomor Truk WAJIB diisi untuk menyimpan Draft!"); document.getElementById('noTruck').focus(); return; }
-
-            const headerData = {
-                shipmentId: document.getElementById('shipmentId').value,
-                noTruck: noTruck,
-                driver: document.getElementById('driver').value,
-                totalCBM: document.getElementById('totalCBM').value,
-                totalGW: document.getElementById('totalGW').value
-            };
-
+            if(!noTruck) { alert("Nomor Truk WAJIB diisi!"); return; }
+            const headerData = { shipmentId: document.getElementById('shipmentId').value, noTruck: noTruck, driver: document.getElementById('driver').value, totalCBM: document.getElementById('totalCBM').value, totalGW: document.getElementById('totalGW').value };
             const rowsData = [];
-            const trs = document.querySelectorAll('#tableBody tr');
-            trs.forEach(tr => {
+            document.querySelectorAll('#tableBody tr').forEach(tr => {
                 const crate = tr.querySelector('.barcode-input').value;
                 if(crate !== "") { 
-                    rowsData.push({
-                        tgl: tr.querySelector('.tgl-input').value, dso: tr.querySelector('.dso-input').value,
-                        die: tr.querySelector('.die-input').value, crate: crate, size: tr.querySelector('.size-input').value,
-                        marking: tr.querySelector('.marking-input').value, thick: tr.querySelector('.thick-input').value,
-                        bay: tr.querySelector('.bay-input').value, row: tr.querySelector('.row-input').value,
-                        col: tr.querySelector('.col-input').value, tier: tr.querySelector('.tier-input').value,
-                        ket: tr.querySelector('.ket-input').value
-                    });
+                    rowsData.push({ tgl: tr.querySelector('.tgl-input').value, dso: tr.querySelector('.dso-input').value, die: tr.querySelector('.die-input').value, crate: crate, size: tr.querySelector('.size-input').value, marking: tr.querySelector('.marking-input').value, thick: tr.querySelector('.thick-input').value, bay: tr.querySelector('.bay-input').value, row: tr.querySelector('.row-input').value, col: tr.querySelector('.col-input').value, tier: tr.querySelector('.tier-input').value, ket: tr.querySelector('.ket-input').value });
                 }
             });
-
-            const draftData = { header: headerData, details: rowsData };
-            localStorage.setItem("WMS_DRAFT_" + noTruck, JSON.stringify(draftData));
-            
-            alert("Draft Truk " + noTruck + " berhasil disimpan ke memori!");
-            loadDraftMenu(); 
+            localStorage.setItem("WMS_DRAFT_" + noTruck, JSON.stringify({ header: headerData, details: rowsData }));
+            alert("Draft Truk " + noTruck + " disimpan!"); loadDraftMenu(); 
         }
 
         function loadDraftMenu() {
-            const draftArea = document.getElementById('draftListArea');
-            draftArea.innerHTML = ""; 
+            const draftArea = document.getElementById('draftListArea'); draftArea.innerHTML = ""; 
             for (let i = 0; i < localStorage.length; i++) {
                 const key = localStorage.key(i);
                 if (key.startsWith("WMS_DRAFT_")) {
-                    const noTruk = key.replace("WMS_DRAFT_", "");
-                    const btn = document.createElement('div');
-                    btn.className = "draft-btn";
-                    btn.innerHTML = `<i class="fas fa-file-signature text-warning me-2"></i> Truk ${noTruk}`;
-                    btn.onclick = function() { openDraft(key); };
+                    const btn = document.createElement('div'); btn.className = "draft-btn";
+                    btn.innerHTML = `<i class="fas fa-file-signature text-warning me-2"></i> Truk ${key.replace("WMS_DRAFT_", "")}`;
+                    btn.onclick = () => {
+                        if(window.innerWidth <= 992) toggleSidebar(); // Tutup sidebar otomatis di HP setelah klik
+                        openDraft(key);
+                    };
                     draftArea.appendChild(btn);
                 }
             }
         }
 
         function openDraft(key) {
-            if(confirm("Tampilkan data draft ini ke layar kerja?")) {
+            if(confirm("Tampilkan data draft ini?")) {
                 const data = JSON.parse(localStorage.getItem(key));
-                document.getElementById('shipmentId').value = data.header.shipmentId;
-                document.getElementById('noTruck').value = data.header.noTruck;
-                document.getElementById('driver').value = data.header.driver;
-                document.getElementById('totalCBM').value = data.header.totalCBM;
-                document.getElementById('totalGW').value = data.header.totalGW;
-                simulateDashboard();
-
-                document.getElementById('tableBody').innerHTML = ""; 
-                const requiredRows = Math.max(20, data.details.length + 5); 
-                addRows(requiredRows);
-
+                document.getElementById('shipmentId').value = data.header.shipmentId; document.getElementById('noTruck').value = data.header.noTruck;
+                document.getElementById('driver').value = data.header.driver; document.getElementById('totalCBM').value = data.header.totalCBM; document.getElementById('totalGW').value = data.header.totalGW;
+                simulateDashboard(); document.getElementById('tableBody').innerHTML = ""; 
+                addRows(Math.max(20, data.details.length + 5));
                 const trs = document.querySelectorAll('#tableBody tr');
-                data.details.forEach((detail, index) => {
-                    const tr = trs[index];
-                    tr.querySelector('.tgl-input').value = detail.tgl; tr.querySelector('.dso-input').value = detail.dso;
-                    tr.querySelector('.die-input').value = detail.die; tr.querySelector('.barcode-input').value = detail.crate;
-                    tr.querySelector('.size-input').value = detail.size; tr.querySelector('.marking-input').value = detail.marking;
-                    tr.querySelector('.thick-input').value = detail.thick; tr.querySelector('.bay-input').value = detail.bay;
-                    tr.querySelector('.row-input').value = detail.row; tr.querySelector('.col-input').value = detail.col;
-                    tr.querySelector('.tier-input').value = detail.tier; tr.querySelector('.ket-input').value = detail.ket;
+                data.details.forEach((det, idx) => {
+                    trs[idx].querySelector('.tgl-input').value = det.tgl; trs[idx].querySelector('.dso-input').value = det.dso;
+                    trs[idx].querySelector('.die-input').value = det.die; trs[idx].querySelector('.barcode-input').value = det.crate;
+                    trs[idx].querySelector('.size-input').value = det.size; trs[idx].querySelector('.marking-input').value = det.marking;
+                    trs[idx].querySelector('.thick-input').value = det.thick; trs[idx].querySelector('.bay-input').value = det.bay;
+                    trs[idx].querySelector('.row-input').value = det.row; trs[idx].querySelector('.col-input').value = det.col;
+                    trs[idx].querySelector('.tier-input').value = det.tier; trs[idx].querySelector('.ket-input').value = det.ket;
                 });
             }
         }
@@ -421,11 +427,9 @@
         function finalizeTransaction() {
             const noTruck = document.getElementById('noTruck').value.trim().toUpperCase();
             if(!noTruck) { alert("Isi Nomor Truk sebelum Finalisasi!"); return; }
-            if(confirm("Kunci dan Selesaikan Transaksi Truk " + noTruck + "? Data tidak bisa diubah lagi oleh Pengawas.")) {
-                localStorage.removeItem("WMS_DRAFT_" + noTruck);
-                alert("Sukses! Data Transaksi terkirim ke Server/Admin.");
-                newTransaction(); 
-                loadDraftMenu(); 
+            if(confirm("Kunci Transaksi Truk " + noTruck + "?")) {
+                localStorage.removeItem("WMS_DRAFT_" + noTruck); alert("Data terkirim ke Server!");
+                newTransaction(); loadDraftMenu(); 
             }
         }
     </script>
