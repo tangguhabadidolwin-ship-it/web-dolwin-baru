@@ -30,10 +30,13 @@
         .table-input input, .table-input select { border: 1px solid #dee2e6; width: 100%; padding: 6px; font-size: 0.75rem; border-radius: 4px; }
         .table-input input:focus, .table-input select:focus { outline: none; border-color: #ff9800; background-color: #fffde7; box-shadow: 0 0 5px rgba(255, 152, 0, 0.3); }
         
-        /* Lebar Kolom HP & Efek 3D */
-        .table-input th:nth-child(5), .table-input td:nth-child(5) { min-width: 140px; } 
-        .table-input th:nth-child(6), .table-input td:nth-child(6) { min-width: 130px; } 
-        .table-input th:nth-child(7), .table-input td:nth-child(7) { min-width: 120px; } 
+        /* Lebar Kolom HP & Efek 3D (Perbaikan Lebar DSO, DIE, MARKING) */
+        .table-input th:nth-child(2), .table-input td:nth-child(2) { min-width: 120px; } /* TGL/WAKTU */
+        .table-input th:nth-child(3), .table-input td:nth-child(3) { min-width: 110px; } /* DSO */
+        .table-input th:nth-child(4), .table-input td:nth-child(4) { min-width: 110px; } /* NO DIE */
+        .table-input th:nth-child(5), .table-input td:nth-child(5) { min-width: 140px; } /* SCAN CRATE */
+        .table-input th:nth-child(6), .table-input td:nth-child(6) { min-width: 130px; } /* SIZE */
+        .table-input th:nth-child(7), .table-input td:nth-child(7) { min-width: 150px; } /* MARKING */
         .table-input th, .table-input td { min-width: 70px; }
         .btn-3d { border-bottom: 4px solid rgba(0,0,0,0.3); transition: all 0.1s; }
         .btn-3d:active { border-bottom: 0px; transform: translateY(4px); margin-bottom: 4px; }
@@ -200,13 +203,18 @@
             
             for(let i = 0; i < count; i++) {
                 const tr = document.createElement('tr');
+                
+                // Set Auto Date saat baris dimunculkan pertama kali
+                const now = new Date();
+                const timeStr = now.toLocaleDateString('id-ID') + " " + now.getHours().toString().padStart(2, '0') + ":" + now.getMinutes().toString().padStart(2, '0');
+
                 tr.innerHTML = `
                     <td class="text-center fw-bold row-number"></td>
-                    <td><input type="text" class="tgl-input" readonly style="background:#f8f9fa; font-size:0.7rem;"></td>
+                    <td><input type="text" class="tgl-input" value="${timeStr}" readonly style="background:#f8f9fa; font-size:0.7rem;"></td>
                     <td><input type="text" list="dsoHistory" class="input-upper dso-input" onblur="processHistory(this, 'dsoHistory', 'DSO')"></td>
                     <td><input type="text" list="dieHistory" class="input-upper die-input" onblur="processHistory(this, 'dieHistory', 'DIE')"></td>
                     
-                    <td><input type="text" maxlength="8" class="barcode-input bg-warning bg-opacity-10 fw-bold text-center" onchange="validateManualBarcode(this)" placeholder="SCAN"></td>
+                    <td><input type="text" maxlength="8" class="barcode-input bg-warning bg-opacity-10 fw-bold text-center" onchange="validateManualBarcode(this)" placeholder="SCAN SINI"></td>
                     
                     <td><select class="size-input">${sizeOptions}</select></td>
                     <td><input type="text" list="markingHistory" class="input-upper marking-input" onblur="processHistory(this, 'markingHistory', '')"></td>
@@ -245,17 +253,16 @@
                 return;
             }
 
-            fillDate(input);
+            fillDate(input); // Update waktu ke detik ini saat discan
         }
 
         function fillDate(inputElement) {
+            // Memaksa update waktu saat barcode benar-benar masuk
             const row = inputElement.closest('tr');
             const dateInput = row.querySelector('.tgl-input');
-            if(inputElement.value.length > 0 && dateInput.value === "") {
-                const now = new Date();
-                const timeString = now.getHours().toString().padStart(2, '0') + ":" + now.getMinutes().toString().padStart(2, '0');
-                dateInput.value = now.toLocaleDateString('id-ID') + " " + timeString;
-            }
+            const now = new Date();
+            const timeString = now.getHours().toString().padStart(2, '0') + ":" + now.getMinutes().toString().padStart(2, '0');
+            dateInput.value = now.toLocaleDateString('id-ID') + " " + timeString;
         }
 
         function hapusBaris(btn) {
@@ -302,7 +309,7 @@
             for (let input of barcodeInputs) {
                 if (input.value === "") {
                     input.value = cleanText;
-                    fillDate(input); 
+                    fillDate(input); // Update waktu ke detik ini saat discan
                     foundEmpty = true;
                     beepSound();
                     
