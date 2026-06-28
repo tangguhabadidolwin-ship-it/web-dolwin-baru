@@ -139,9 +139,20 @@
                     <table class="table table-bordered table-input" id="scanTable">
                         <thead>
                             <tr>
-                                <th width="3%">NO</th><th width="9%">TGL/WAKTU</th><th width="7%">DSO</th><th width="7%">NO DIE</th>
-                                <th width="11%">SCAN CRATE</th><th width="10%">SIZE</th><th width="9%">MARKING</th><th width="6%">THICK</th>
-                                <th width="8%">AREA</th><th width="5%">R</th><th width="5%">C</th><th width="5%">T</th><th width="10%">AKSI</th>
+                                <th width="3%">NO</th>
+                                <th width="9%">TGL/WAKTU</th>
+                                <th width="7%">DSO</th>
+                                <th width="7%">NO DIE</th>
+                                <th width="11%">SCAN CRATE</th>
+                                <th width="10%">SIZE</th>
+                                <th width="9%">MARKING</th>
+                                <th width="6%">THICK</th>
+                                <th width="8%">AREA</th>
+                                <th width="6%">Row</th>
+                                <th width="6%">Column</th>
+                                <th width="6%">Tier</th>
+                                <th width="10%">Keterangan</th>
+                                <th width="7%">AKSI</th>
                             </tr>
                         </thead>
                         <tbody id="tableBody"></tbody>
@@ -269,39 +280,33 @@
         function addRows(count) {
             const tbody = document.getElementById('tableBody');
             
-            // Opsi Size
-            const sizeOptions = `<option value="">-Pilih-</option><option value="1220 X 2440">1220 X 2440</option><option value="1220 X 2800">1220 X 2800</option>`;
+            // 1. Data untuk Dropdown AREA (Bay A-G + RW 1-10)
+            const bayArr = ['BAY A', 'BAY B', 'BAY C', 'BAY D', 'BAY E', 'BAY F', 'BAY G'];
+            let areaOps = `<option value="">-Pilih-</option>`;
+            bayArr.forEach(b => areaOps += `<option value="${b}">${b}</option>`);
+            for(let j=1; j<=10; j++) { areaOps += `<option value="RW ${j}">RW ${j}</option>`; }
             
-            // Generate Opsi Bay (BAY A - BAY G)
-            const bayOptionsArray = ['BAY A', 'BAY B', 'BAY C', 'BAY D', 'BAY E', 'BAY F', 'BAY G'];
-            let bayOptionsStr = `<option value="">-Pilih-</option>`;
-            bayOptionsArray.forEach(b => bayOptionsStr += `<option value="${b}">${b}</option>`);
-
-            // Generate Opsi Row (RW 1 - RW 10)
-            let rowOptionsStr = `<option value="">-Pilih-</option>`;
-            for(let j=1; j<=10; j++) { rowOptionsStr += `<option value="${j}">RW ${j}</option>`; }
+            // 2. Opsi Size
+            const sizeOptions = `<option value="">-Pilih-</option><option value="1220 X 2440">1220 X 2440</option><option value="1220 X 2800">1220 X 2800</option>`;
             
             for(let i = 0; i < count; i++) {
                 const tr = document.createElement('tr');
-                
-                // TANGGAL DIKOSONGKAN AWALNYA. Akan terisi saat barcode masuk.
                 tr.innerHTML = `
                     <td class="text-center fw-bold row-number"></td>
                     <td><input type="text" class="tgl-input" value="" placeholder="-" readonly style="background:#f8f9fa; font-size:0.7rem; text-align:center;"></td>
                     <td><input type="text" list="dsoHistory" class="input-upper dso-input" onblur="processHistory(this, 'dsoHistory', 'DSO')"></td>
                     <td><input type="text" list="dieHistory" class="input-upper die-input" onblur="processHistory(this, 'dieHistory', 'DIE')"></td>
-                    
                     <td><input type="text" maxlength="8" class="barcode-input bg-warning bg-opacity-10 fw-bold text-center" onchange="validateManualBarcode(this)" placeholder="SCAN SINI"></td>
-                    
                     <td><select class="size-input">${sizeOptions}</select></td>
                     <td><input type="text" list="markingHistory" class="input-upper marking-input" onblur="processHistory(this, 'markingHistory', '')"></td>
                     <td><input type="text" list="thickHistory" class="input-upper thick-input" onblur="processHistory(this, 'thickHistory', '')"></td>
                     
-                    <td><select class="bay-input">${bayOptionsStr}</select></td>
-                    <td><select class="row-input">${rowOptionsStr}</select></td>
+                    <td><select class="bay-input">${areaOps}</select></td>
+                    <td><input type="number" class="row-input" placeholder="Row"></td>
+                    <td><input type="number" class="col-input" placeholder="Col"></td>
+                    <td><input type="number" min="1" max="9" class="tier-input" placeholder="Tier"></td>
+                    <td><input type="text" class="input-upper ket-input" placeholder="Ket"></td>
                     
-                    <td><input type="number" min="1" max="100" class="col-input"></td>
-                    <td><input type="number" min="1" max="10" class="tier-input"></td>
                     <td class="text-center"><button class="btn btn-danger btn-sm btn-3d" onclick="hapusBaris(this)"><i class="fas fa-trash"></i></button></td>
                 `;
                 tbody.appendChild(tr);
