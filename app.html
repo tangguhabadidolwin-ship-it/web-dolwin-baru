@@ -332,7 +332,7 @@
         }
 
         // ==========================================
-        // SISTEM DRAFT UTUH (TIDAK DIPOTONG)
+        // SISTEM DRAFT UTUH 
         // ==========================================
         function newTransaction() { 
             if(confirm("Yakin ingin menghapus data di layar dan membuat transaksi baru?")) {
@@ -446,16 +446,80 @@
             });
         }
         
+        // ==========================================
+        // FUNGSI FINALISASI (KIRIM KE SERVER)
+        // ==========================================
         function finalizeTransaction() { 
             const noTruck = document.getElementById('noTruck').value.trim().toUpperCase();
             if(!noTruck) return alert("Isi Nomor Truk sebelum Finalisasi!");
-            if(confirm("Apakah Anda yakin menyelesaikan transaksi Truk " + noTruck + "?")) {
-                localStorage.removeItem("WMS_DRAFT_" + noTruck);
-                alert("Sukses! Data dikunci dan dikirim.");
-                document.getElementById('tableBody').innerHTML = ""; 
-                addRows(20);
-                loadDraftMenu();
-            }
+            if(!confirm("Apakah Anda yakin menyelesaikan transaksi Truk " + noTruck + " dan mengirimnya ke server?")) return;
+
+            // Ambil Data Header
+            const headerData = {
+                shipper: document.getElementById('shipperSelect').value,
+                gudang: document.getElementById('gudangSelect').value,
+                shipmentId: document.getElementById('shipmentId').value,
+                noTruck: noTruck,
+                driver: document.getElementById('driver').value,
+                totalCBM: document.getElementById('totalCBM').value,
+                totalGW: document.getElementById('totalGW').value
+            };
+            
+            // Ambil Data Tabel Detail
+            const rowsData = [];
+            document.querySelectorAll('#tableBody tr').forEach(tr => {
+                const crate = tr.querySelector('.barcode-input').value;
+                if(crate !== "") { 
+                    rowsData.push({ 
+                        tgl: tr.querySelector('.tgl-input').value, 
+                        dso: tr.querySelector('.dso-input').value, 
+                        die: tr.querySelector('.die-input').value, 
+                        crate: crate, 
+                        size: tr.querySelector('.size-input').value, 
+                        marking: tr.querySelector('.marking-input').value, 
+                        thick: tr.querySelector('.thick-input').value, 
+                        bay: tr.querySelector('.bay-input').value, 
+                        row: tr.querySelector('.row-input').value, 
+                        col: tr.querySelector('.col-input').value, 
+                        tier: tr.querySelector('.tier-input').value,
+                        ket: "" // Default kosong untuk keterangan
+                    });
+                }
+            });
+
+            if(rowsData.length === 0) return alert("Belum ada data crate yang di-scan!");
+
+            const payload = { header: headerData, details: rowsData };
+
+            // Kirim ke Server via fetch API
+            fetch('save_receiving.php', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            })
+            .then(response => response.json())
+            .then(data => {
+                if(data.status === "success") {
+                    localStorage.removeItem("WMS_DRAFT_" + noTruck);
+                    alert("Sukses! " + data.message);
+                    
+                    // Reset Form ke keadaan awal
+                    document.getElementById('shipmentId').value = ""; 
+                    document.getElementById('noTruck').value = "";
+                    document.getElementById('driver').value = ""; 
+                    document.getElementById('totalCBM').value = "";
+                    document.getElementById('totalGW').value = ""; 
+                    document.getElementById('tableBody').innerHTML = ""; 
+                    addRows(20);
+                    loadDraftMenu();
+                } else {
+                    alert("Gagal menyimpan ke server: " + data.message);
+                }
+            })
+            .catch(error => {
+                console.error("Error:", error);
+                alert("Terjadi kesalahan koneksi ke server.");
+            });
         }
     </script>
 </body>
